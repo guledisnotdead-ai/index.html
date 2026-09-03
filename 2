@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renewable Energy for Essential Loads — Design Proposal Template</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#14213D; --navy-deep:#0D1729;
+    --fog:#E9EDEA; --fog-dim:#DCE1DC;
+    --amber:#F0A83C; --teal:#3E8E82; --coral:#E2604F;
+    --ink:#1B1F1D; --sub:#4A524C;
+    --display:'Space Grotesk',sans-serif; --body:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:var(--body); background:#fff; color:var(--ink); line-height:1.65; }
+  a{ color:inherit; text-decoration:none; }
+  section{ position:relative; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 32px; }
+  h1,h2,h3,h4{ font-family:var(--display); letter-spacing:-0.01em; }
+  .placeholder{ color:var(--sub); font-style:italic; }
+  :focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--teal); display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .num{
+    font-family:var(--mono); font-size:0.7rem; color:var(--amber); border:1px solid var(--amber);
+    border-radius:2px; padding:1px 6px;
+  }
+  .lede{ color:var(--sub); max-width:70ch; margin-top:14px; }
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:100; background:rgba(20,33,61,0.95);
+    backdrop-filter:blur(8px); border-bottom:1px solid rgba(240,168,60,0.18);
+  }
+  nav{ max-width:1080px; margin:0 auto; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:600; color:var(--fog); font-size:0.95rem; }
+  .brand svg{ width:22px; height:22px; }
+  .navlinks{ display:flex; gap:18px; flex-wrap:wrap; }
+  .navlinks a{
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.03em; text-transform:uppercase;
+    color:rgba(233,237,234,0.6); padding:4px 0; border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease; white-space:nowrap;
+  }
+  .navlinks a span{ color:var(--amber); margin-right:4px; }
+  .navlinks a:hover, .navlinks a.active{ color:var(--fog); border-color:var(--amber); }
+  .navtoggle{ display:none; background:none; border:none; cursor:pointer; width:30px; height:22px; position:relative; }
+  .navtoggle span{ position:absolute; left:0; right:0; height:2px; background:var(--fog); }
+  .navtoggle span:nth-child(1){ top:1px; } .navtoggle span:nth-child(2){ top:10px; } .navtoggle span:nth-child(3){ top:19px; }
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 100%);
+    color:var(--fog); padding:88px 32px 64px;
+  }
+  .hero-inner{ max-width:1080px; margin:0 auto; }
+  .hero .eyebrow{ color:var(--amber); }
+  .hero .eyebrow::before{ content:""; width:22px; height:1px; background:var(--amber); display:inline-block; }
+  .hero h1{ font-size:clamp(1.9rem,3.6vw,2.9rem); margin:16px 0 14px; font-weight:600; max-width:22ch; }
+  .hero p.lede{ color:rgba(233,237,234,0.75); }
+  .meta-row{
+    display:flex; gap:32px; flex-wrap:wrap; margin-top:32px; padding-top:24px;
+    border-top:1px solid rgba(233,237,234,0.15);
+  }
+  .meta-item{ font-family:var(--mono); font-size:0.78rem; }
+  .meta-item .k{ color:rgba(233,237,234,0.5); text-transform:uppercase; letter-spacing:0.05em; font-size:0.68rem; display:block; margin-bottom:4px; }
+  .meta-item .v{ color:var(--fog); }
+
+  .schema-strip{ margin-top:40px; opacity:0.9; }
+  .schema-strip svg{ width:100%; height:auto; }
+
+  /* SECTIONS */
+  .band{ padding:76px 0; border-bottom:1px solid var(--fog-dim); }
+  .section-head{ max-width:680px; margin-bottom:38px; }
+  .section-head h2{ font-size:clamp(1.4rem,2.6vw,1.9rem); margin-top:12px; }
+
+  /* Team contributions */
+  .contrib-table, .cost-table, .reqs-table, .results-table{
+    width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:8px;
+  }
+  .contrib-table th, .cost-table th, .reqs-table th, .results-table th{
+    text-align:left; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--sub); padding:10px 14px; border-bottom:2px solid var(--ink);
+  }
+  .contrib-table td, .cost-table td, .reqs-table td, .results-table td{
+    padding:12px 14px; border-bottom:1px solid var(--fog-dim); vertical-align:top;
+  }
+  .cost-table tfoot td{ font-weight:600; border-top:2px solid var(--ink); border-bottom:none; }
+
+  /* Journey map */
+  .journey{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-top:8px; }
+  .journey-stage{
+    border-top:3px solid var(--teal); padding:18px 16px 0; position:relative;
+  }
+  .journey-stage:not(:last-child)::after{
+    content:"→"; position:absolute; right:-14px; top:-14px; color:var(--fog-dim); font-size:1rem;
+  }
+  .journey-stage h4{ font-size:0.88rem; margin-bottom:6px; }
+  .journey-stage p{ font-size:0.82rem; color:var(--sub); }
+
+  /* Needs cards */
+  .card-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:8px; }
+  .need-card{ border:1px solid var(--fog-dim); border-radius:6px; padding:22px; }
+  .need-card h4{ font-size:0.95rem; margin-bottom:8px; }
+  .need-card p{ font-size:0.85rem; color:var(--sub); }
+  .priority{
+    display:inline-block; margin-top:10px; font-family:var(--mono); font-size:0.65rem;
+    letter-spacing:0.05em; text-transform:uppercase; padding:2px 8px; border-radius:20px; border:1px solid currentColor;
+  }
+  .priority.high{ color:var(--coral); }
+  .priority.med{ color:var(--amber); }
+  .priority.low{ color:var(--teal); }
+
+  /* Idea cards */
+  .idea-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:8px; }
+  .idea-card{ background:var(--fog); border-radius:6px; padding:18px; font-size:0.85rem; }
+  .idea-card .id{ font-family:var(--mono); font-size:0.68rem; color:var(--teal); }
+  .idea-card h4{ font-size:0.9rem; margin:6px 0 4px; }
+  .idea-card p{ color:var(--sub); font-size:0.8rem; }
+
+  /* Decision matrix */
+  .matrix-wrap{ overflow-x:auto; margin-top:20px; }
+  .matrix{ width:100%; border-collapse:collapse; font-size:0.85rem; min-width:640px; }
+  .matrix th, .matrix td{ padding:10px 14px; text-align:center; border:1px solid var(--fog-dim); }
+  .matrix th{ font-family:var(--mono); font-size:0.68rem; text-transform:uppercase; background:var(--navy); color:var(--fog); }
+  .matrix td:first-child, .matrix th:first-child{ text-align:left; }
+  .matrix .winner{ background:rgba(240,168,60,0.14); font-weight:600; }
+  .matrix .total-row td{ font-weight:600; border-top:2px solid var(--ink); }
+
+  /* Prototype */
+  .proto-grid{ display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:start; }
+  .proto-figure{
+    border:1px dashed var(--fog-dim); border-radius:6px; aspect-ratio:4/3;
+    display:flex; align-items:center; justify-content:center; color:var(--sub);
+    font-family:var(--mono); font-size:0.8rem; text-align:center; padding:24px; background:var(--fog);
+  }
+
+  /* Timeline */
+  .timeline{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:8px; }
+  .phase{ border-left:3px solid var(--amber); padding-left:14px; }
+  .phase .ph{ font-family:var(--mono); font-size:0.68rem; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em; }
+  .phase h4{ font-size:0.92rem; margin:6px 0 4px; }
+  .phase p{ font-size:0.82rem; color:var(--sub); }
+
+  /* Recommendations */
+  .rec-list{ margin-top:8px; }
+  .rec-item{ display:flex; gap:16px; padding:18px 0; border-bottom:1px solid var(--fog-dim); }
+  .rec-item .n{ font-family:var(--display); font-size:1.4rem; color:var(--teal); font-weight:600; min-width:36px; }
+  .rec-item h4{ font-size:1rem; margin-bottom:4px; }
+  .rec-item p{ font-size:0.9rem; color:var(--sub); }
+
+  /* References */
+  .ref-list{ margin-top:8px; font-size:0.9rem; }
+  .ref-item{ padding-left:2.4em; text-indent:-2.4em; margin-bottom:14px; color:var(--sub); }
+  .ref-note{
+    background:var(--fog); border-left:3px solid var(--teal); padding:14px 18px; margin-top:24px;
+    font-size:0.85rem; border-radius:4px;
+  }
+
+  footer{ background:var(--navy-deep); color:rgba(233,237,234,0.55); padding:36px 0; font-size:0.8rem; }
+  .footer-inner{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:var(--mono); }
+
+  @media (max-width:900px){
+    .navlinks{
+      position:fixed; top:58px; left:0; right:0; bottom:0; background:var(--navy-deep);
+      flex-direction:column; padding:24px 32px; transform:translateX(100%); transition:transform .3s ease; overflow-y:auto;
+    }
+    .navlinks.open{ transform:translateX(0); }
+    .navlinks a{ padding:12px 0; border-bottom:1px solid rgba(233,237,234,0.08); width:100%; }
+    .navtoggle{ display:block; }
+    .journey{ grid-template-columns:repeat(2,1fr); gap:24px 16px; }
+    .journey-stage::after{ display:none; }
+    .card-grid{ grid-template-columns:1fr 1fr; }
+    .idea-grid{ grid-template-columns:1fr 1fr; }
+    .proto-grid{ grid-template-columns:1fr; }
+    .timeline{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:560px){
+    .card-grid, .idea-grid, .journey, .timeline{ grid-template-columns:1fr; }
+    .band{ padding:56px 0; }
+  }
+  @media (prefers-reduced-motion:reduce){ *{ scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.6">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-linecap="round"/>
+      </svg>
+      <span>[Project Name]</span>
+    </div>
+    <div class="navlinks" id="navlinks">
+      <a href="#summary"><span>00</span>Summary</a>
+      <a href="#empathise"><span>01</span>Empathise</a>
+      <a href="#define"><span>02</span>Define</a>
+      <a href="#ideate"><span>03</span>Ideate</a>
+      <a href="#prototype"><span>04</span>Prototype &amp; Test</a>
+      <a href="#implementation"><span>05</span>Implementation</a>
+      <a href="#recommendations"><span>06</span>Recommendations</a>
+      <a href="#references"><span>07</span>References</a>
+    </div>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Design Proposal</div>
+    <h1>Renewable Energy for Essential Loads</h1>
+    <p class="lede">[One or two sentences framing the design opportunity and the community partner you worked with — written for a reader who has no prior context on your project.]</p>
+    <div class="meta-row">
+      <div class="meta-item"><span class="k">Community Partner</span><span class="v placeholder">[Partner name]</span></div>
+      <div class="meta-item"><span class="k">Design Team</span><span class="v placeholder">[Team name / number]</span></div>
+      <div class="meta-item"><span class="k">Subject</span><span class="v placeholder">[Subject code]</span></div>
+      <div class="meta-item"><span class="k">Date</span><span class="v placeholder">[Month Year]</span></div>
+    </div>
+    <div class="schema-strip" aria-hidden="true">
+      <svg viewBox="0 0 900 60">
+        <line x1="0" y1="30" x2="900" y2="30" stroke="rgba(233,237,234,0.15)" stroke-width="1"/>
+        <g stroke="var(--amber)" stroke-width="1.4" fill="none">
+          <circle cx="60" cy="30" r="10"/>
+          <line x1="60" y1="8" x2="60" y2="0" stroke-linecap="round"/><line x1="60" y1="60" x2="60" y2="52" stroke-linecap="round"/>
+        </g>
+        <line x1="70" y1="30" x2="220" y2="30" stroke="var(--amber)" stroke-width="1.2" stroke-dasharray="3 5"/>
+        <g transform="translate(220,15)"><rect width="60" height="30" rx="3" fill="none" stroke="var(--teal)" stroke-width="1.4"/><rect x="26" y="-6" width="8" height="6" fill="var(--teal)"/></g>
+        <line x1="280" y1="30" x2="430" y2="30" stroke="var(--teal)" stroke-width="1.2" stroke-dasharray="3 5"/>
+        <g transform="translate(430,15)" stroke="var(--coral)" stroke-width="1.4" fill="none"><rect width="60" height="30" rx="3"/><line x1="20" y1="6" x2="20" y2="24"/><line x1="40" y1="6" x2="40" y2="24"/></g>
+        <line x1="490" y1="30" x2="600" y2="30" stroke="var(--coral)" stroke-width="1.2" stroke-dasharray="3 5"/>
+        <g transform="translate(600,10)" stroke="var(--coral)" stroke-width="1.4" fill="none"><circle r="20" cx="20" cy="20"/><path d="M13,20h14M20,13v14" stroke-linecap="round"/></g>
+        <text x="850" y="34" text-anchor="end" font-family="IBM Plex Mono" font-size="10" fill="rgba(233,237,234,0.4)">generation → storage → distribution → essential loads</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="summary">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">00</span>Executive Summary</div>
+      <h2>What this proposal is, and what we recommend.</h2>
+    </div>
+    <p class="placeholder">[3–5 paragraph executive summary: the opportunity brief, your final recommended solution in one sentence, why it fits the community context, and the key evidence behind it. Write this last, once every other section is finished — it should stand alone for a reader who reads nothing else.]</p>
+
+    <h3 style="margin-top:32px; font-size:1.05rem;">Team Contributions</h3>
+    <table class="contrib-table">
+      <thead><tr><th>Name</th><th>Role / Focus Area</th><th>Key Contributions</th></tr></thead>
+      <tbody>
+        <tr><td>[Name]</td><td>[e.g. Research Lead]</td><td class="placeholder">[Summary of what they did]</td></tr>
+        <tr><td>[Name]</td><td>[e.g. Prototyping]</td><td class="placeholder">[Summary of what they did]</td></tr>
+        <tr><td>[Name]</td><td>[e.g. Costing & Implementation]</td><td class="placeholder">[Summary of what they did]</td></tr>
+        <tr><td>[Name]</td><td>[e.g. Testing & Documentation]</td><td class="placeholder">[Summary of what they did]</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="band" id="empathise">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">01</span>Empathise</div>
+      <h2>Understanding the community context.</h2>
+      <p class="lede">Desktop research and the user journey map — the evidence base for who this design serves and what their day-to-day experience of the problem looks like.</p>
+    </div>
+
+    <h3 style="font-size:1rem; margin-bottom:10px;">Desktop Research</h3>
+    <p class="placeholder">[Synthesise your desktop research here: context on energy access/reliability for this community, relevant statistics, prior interventions, and any climate/geographic/socioeconomic factors that shape the brief. Cite every claim in APA 7th, e.g. (Smith, 2023).]</p>
+
+    <h3 style="font-size:1rem; margin:28px 0 6px;">User Journey Map</h3>
+    <p class="placeholder" style="margin-bottom:16px;">[Replace the five stages below with the real stages of your user's experience — e.g. before an outage, during, immediately after, recovery, long-term.]</p>
+    <div class="journey">
+      <div class="journey-stage"><h4>[Stage 1]</h4><p class="placeholder">[Pain point / need]</p></div>
+      <div class="journey-stage"><h4>[Stage 2]</h4><p class="placeholder">[Pain point / need]</p></div>
+      <div class="journey-stage"><h4>[Stage 3]</h4><p class="placeholder">[Pain point / need]</p></div>
+      <div class="journey-stage"><h4>[Stage 4]</h4><p class="placeholder">[Pain point / need]</p></div>
+      <div class="journey-stage"><h4>[Stage 5]</h4><p class="placeholder">[Pain point / need]</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="define">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">02</span>Define</div>
+      <h2>User needs and design requirements.</h2>
+      <p class="lede">What the community actually needs, translated into requirements your concepts were screened against.</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="need-card"><h4>[Need 1]</h4><p class="placeholder">[One line on why this need exists, sourced from empathise stage.]</p><span class="priority high">High priority</span></div>
+      <div class="need-card"><h4>[Need 2]</h4><p class="placeholder">[One line justification.]</p><span class="priority med">Medium priority</span></div>
+      <div class="need-card"><h4>[Need 3]</h4><p class="placeholder">[One line justification.]</p><span class="priority low">Low priority</span></div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:32px 0 8px;">Design Requirements</h3>
+    <table class="reqs-table">
+      <thead><tr><th>Requirement</th><th>Related User Need</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="placeholder">[e.g. System must run essential loads for 12+ hrs without sun]</td><td>[Need 1]</td><td>High</td></tr>
+        <tr><td class="placeholder">[Requirement]</td><td>[Need 2]</td><td>Medium</td></tr>
+        <tr><td class="placeholder">[Requirement]</td><td>[Need 3]</td><td>Low</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="band" id="ideate">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">03</span>Ideate &amp; Screen</div>
+      <h2>Concepts considered, and how we chose.</h2>
+    </div>
+
+    <div class="idea-grid">
+      <div class="idea-card"><span class="id">Concept A</span><h4>[Name]</h4><p class="placeholder">[One-line description]</p></div>
+      <div class="idea-card"><span class="id">Concept B</span><h4>[Name]</h4><p class="placeholder">[One-line description]</p></div>
+      <div class="idea-card"><span class="id">Concept C</span><h4>[Name]</h4><p class="placeholder">[One-line description]</p></div>
+      <div class="idea-card"><span class="id">Concept D</span><h4>[Name]</h4><p class="placeholder">[One-line description]</p></div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:32px 0 6px;">Decision Matrix</h3>
+    <p class="placeholder" style="margin-bottom:6px;">[Replace criteria, weights and scores with your team's actual matrix. Highlighted column = selected concept.]</p>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead><tr><th>Criteria (weight)</th><th>Concept A</th><th>Concept B</th><th class="winner">Concept C</th><th>Concept D</th></tr></thead>
+        <tbody>
+          <tr><td>[Cost] (x[0.2])</td><td>[3]</td><td>[4]</td><td class="winner">[4]</td><td>[2]</td></tr>
+          <tr><td>[Reliability] (x[0.3])</td><td>[2]</td><td>[3]</td><td class="winner">[5]</td><td>[3]</td></tr>
+          <tr><td>[Maintainability] (x[0.2])</td><td>[3]</td><td>[3]</td><td class="winner">[4]</td><td>[4]</td></tr>
+          <tr><td>[Community fit] (x[0.3])</td><td>[2]</td><td>[3]</td><td class="winner">[5]</td><td>[3]</td></tr>
+          <tr class="total-row"><td>Weighted total</td><td>[2.4]</td><td>[3.2]</td><td class="winner">[4.5]</td><td>[3.0]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="prototype">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">04</span>Prototype &amp; Test</div>
+      <h2>Building and validating the design.</h2>
+    </div>
+
+    <div class="proto-grid">
+      <div>
+        <h3 style="font-size:1rem; margin-bottom:8px;">Prototype</h3>
+        <p class="placeholder">[Describe the prototype you built — physical, digital, or paper — and how it represents the selected concept from the decision matrix.]</p>
+        <h3 style="font-size:1rem; margin:22px 0 8px;">Test Methodology</h3>
+        <p class="placeholder">[Who tested it, under what conditions, what you measured, and why that method suited this context.]</p>
+      </div>
+      <div class="proto-figure">[Insert prototype photo / diagram here]</div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:32px 0 8px;">Testing Outcomes</h3>
+    <table class="results-table">
+      <thead><tr><th>Test Criterion</th><th>Method</th><th>Outcome</th></tr></thead>
+      <tbody>
+        <tr><td class="placeholder">[e.g. Battery holds critical load overnight]</td><td class="placeholder">[Method]</td><td class="placeholder">[Result + what it means for the design]</td></tr>
+        <tr><td class="placeholder">[Criterion]</td><td class="placeholder">[Method]</td><td class="placeholder">[Result]</td></tr>
+        <tr><td class="placeholder">[Criterion]</td><td class="placeholder">[Method]</td><td class="placeholder">[Result]</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="band" id="implementation">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">05</span>Implementation</div>
+      <h2>Costs, delivery plan and other considerations.</h2>
+    </div>
+
+    <h3 style="font-size:1rem; margin-bottom:8px;">Estimated Costs</h3>
+    <table class="cost-table">
+      <thead><tr><th>Item</th><th>Qty</th><th>Unit Cost</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        <tr><td class="placeholder">[Solar panels]</td><td>[X]</td><td>$[XXX]</td><td>$[X,XXX]</td></tr>
+        <tr><td class="placeholder">[Battery bank]</td><td>[X]</td><td>$[XXX]</td><td>$[X,XXX]</td></tr>
+        <tr><td class="placeholder">[Inverter / controller]</td><td>[X]</td><td>$[XXX]</td><td>$[X,XXX]</td></tr>
+        <tr><td class="placeholder">[Installation / labour]</td><td>—</td><td>—</td><td>$[X,XXX]</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">Total estimated cost</td><td>$[XX,XXX]</td></tr></tfoot>
+    </table>
+
+    <h3 style="font-size:1rem; margin:32px 0 8px;">Implementation Timeline</h3>
+    <div class="timeline">
+      <div class="phase"><span class="ph">Phase 1</span><h4>[Procurement]</h4><p class="placeholder">[Duration + key tasks]</p></div>
+      <div class="phase"><span class="ph">Phase 2</span><h4>[Installation]</h4><p class="placeholder">[Duration + key tasks]</p></div>
+      <div class="phase"><span class="ph">Phase 3</span><h4>[Commissioning]</h4><p class="placeholder">[Duration + key tasks]</p></div>
+      <div class="phase"><span class="ph">Phase 4</span><h4>[Handover & Training]</h4><p class="placeholder">[Duration + key tasks]</p></div>
+    </div>
+
+    <h3 style="font-size:1rem; margin:32px 0 8px;">Other Considerations</h3>
+    <p class="placeholder">[Cover safety, maintenance responsibility, cultural/community engagement, environmental impact, and any risks or assumptions — whatever is relevant to a holistic assessment of your design.]</p>
+  </div>
+</section>
+
+<section class="band" id="recommendations" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">06</span>Recommendations</div>
+      <h2>Our coherent design direction.</h2>
+    </div>
+    <div class="rec-list">
+      <div class="rec-item"><span class="n">1</span><div><h4>[Recommendation]</h4><p class="placeholder">[Brief justification linking back to needs, testing, or costing evidence above.]</p></div></div>
+      <div class="rec-item"><span class="n">2</span><div><h4>[Recommendation]</h4><p class="placeholder">[Justification]</p></div></div>
+      <div class="rec-item"><span class="n">3</span><div><h4>[Recommendation]</h4><p class="placeholder">[Justification]</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="references" style="border-bottom:none; background:var(--fog);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="num">07</span>References</div>
+      <h2>Sources (APA 7th).</h2>
+    </div>
+    <div class="ref-list">
+      <p class="ref-item placeholder">Author, A. A. (Year). Title of work in sentence case. Publisher. https://doi.org/xxxx</p>
+      <p class="ref-item placeholder">Author, B. B., &amp; Author, C. C. (Year). Title of article. Journal Name in Title Case, Volume(Issue), pages. https://doi.org/xxxx</p>
+      <p class="ref-item placeholder">Organisation Name. (Year). Title of report. https://url.com</p>
+    </div>
+    <div class="ref-note">Hanging-indent formatting is already applied above — just replace each entry with your real sources, alphabetised by author surname.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>[Team Name] · [Subject Code] · [Semester / Year]</span>
+    <span>[Institution Name]</span>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navtoggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.navlinks a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        navAnchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
